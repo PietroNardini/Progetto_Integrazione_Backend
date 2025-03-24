@@ -1,5 +1,6 @@
 package com.example.microServizio.api;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,21 @@ public class MainController {
         }
         catch (Exception e){
             return ResponseEntity.ok("Error: " + e.getMessage());
+        }
+        
+    }
+    @PostMapping("/saveRecord") // New endpoint to save data
+    public ResponseEntity<Map<String, String>> saveRecord(@RequestBody Dipendente record) {
+        try{
+            myService.insert(record);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Record saved successfully");
+            return ResponseEntity.ok(response);
+        }
+        catch (Exception e){
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Error: " + e.getMessage());
+            return ResponseEntity.ok(response);
         }
         
     }

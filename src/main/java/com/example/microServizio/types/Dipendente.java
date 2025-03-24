@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,6 @@ public class Dipendente {
     private String cognome;  
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
-    
     private Double bancaOre; 
     public Integer getId() {
         return id;
@@ -42,7 +42,7 @@ public class Dipendente {
     public Integer getUserId(){
         return userId;
     }
-    private Double getbancaOre(){
+    public Double getbancaOre(){
             return bancaOre;
     }
     public Ruolo getRuolo(){
@@ -51,4 +51,5 @@ public class Dipendente {
     public String toString(){
         return "Dipendente [id=" + id + ", userId=" + userId + ", nome=" + nome + ", cognome=" + cognome + ", ruolo=" + ruolo + ", bancaOre=" + bancaOre + "]";
     }
+    
 }
