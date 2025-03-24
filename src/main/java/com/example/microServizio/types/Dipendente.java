@@ -27,7 +27,28 @@ public class Dipendente {
     
     private String cognome;  
     @Enumerated(EnumType.STRING)
-    private Ruolo ruolo;    
+    private Ruolo ruolo;
     
     private Double bancaOre; 
+    public Integer getId() {
+        return id;
+    }
+    public String getNome(){
+        return nome;
+    }
+    public String getCognome(){
+        return cognome;
+    }
+    public Integer getUserId(){
+        return userId;
+    }
+    private Double getbancaOre(){
+            return bancaOre;
+    }
+    public Ruolo getRuolo(){
+        return ruolo;
+    }
+    public String toString(){
+        return "Dipendente [id=" + id + ", userId=" + userId + ", nome=" + nome + ", cognome=" + cognome + ", ruolo=" + ruolo + ", bancaOre=" + bancaOre + "]";
+    }
 }

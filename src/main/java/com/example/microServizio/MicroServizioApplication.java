@@ -1,5 +1,4 @@
 package com.example.microServizio;
-import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
