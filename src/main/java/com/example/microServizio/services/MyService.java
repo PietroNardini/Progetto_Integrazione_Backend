@@ -7,8 +7,7 @@ import com.example.microServizio.types.Dipendente;
 import jakarta.transaction.Transactional;
 
 import com.example.microServizio.repository.MyRepository;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Optional;
 @Service
 public class MyService {
