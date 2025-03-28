@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 
 import com.example.microServizio.repository.MyRepository;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class MyService {
@@ -15,7 +16,21 @@ public class MyService {
     @Autowired
     private MyRepository myRepository;
     
-    public Dipendente FindEmployee(Integer id){
+    public List<Dipendente> FindEmployee(String key,String value){
+        if(key.equals("nome")){
+            return myRepository.findByNome(value);
+        }
+        else if(key.equals("cognome")){
+            return myRepository.findByCognome(value);
+        }
+        else if(key.equals("ruolo")){
+            return myRepository.findByRuolo(value);
+        }
+        else{
+            return null;
+        }
+    }
+    public Dipendente FindEmployeeById(Integer id){
         Optional<Dipendente> results=myRepository.findById(id.longValue());
         return results.orElse(null);
     }
