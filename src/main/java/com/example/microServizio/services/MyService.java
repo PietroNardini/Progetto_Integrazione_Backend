@@ -15,7 +15,24 @@ public class MyService {
     
     @Autowired
     private MyRepository myRepository; //instanzio la repository con le dichiarazione delle query che si trovano in JpaRepository
-    
+    public String aggiungiOre(Integer id, Double ore) throws Exception { //questo metodo aggiunge le ore alla banca ore del dipendente con l'id passato in input
+        try{
+            Optional<Dipendente> results=myRepository.findById(id.longValue());
+            if(results.isPresent()){
+                Dipendente dipendente=results.get();
+                dipendente.setBancaOre(dipendente.getBancaOre()+ore);
+                myRepository.save(dipendente);
+                return "ore aggiunte con successo";
+            }
+            else{
+                return "non esiste nessun dipendente con questo id";
+            }
+        }
+        catch (Exception e){
+            return "errore: "+e.getMessage();
+        }
+        
+    }
     public List<Dipendente> FindEmployee(String key,String value){ //questo metodo ritorna una lista di dipendenti con l'attributo(key) di un certo valore(value)
         if(key.equals("nome")){
             return myRepository.findByNome(value);

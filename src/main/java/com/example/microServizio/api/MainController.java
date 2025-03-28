@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.microServizio.services.MyService;
@@ -21,6 +24,18 @@ import com.example.microServizio.types.Dipendente;
 public class MainController {
     @Autowired//permette di iniettare automaticamente l'istanza di un Bean in un altra classe
     private MyService myService;//instanzio la classe in cui ci sono le implementazioni dei metodi per interfacciarsi con il database
+    @PatchMapping("/aggiungiOre")
+    public ResponseEntity<String> aggiungiOre(@RequestBody Map<String, String> updates) {
+    try {
+        String result=myService.aggiungiOre(Integer.parseInt(updates.get("id")), Double.parseDouble(updates.get("banca_ore")));//chiamo il metodo per aggiungere le ore alla banca ore del dipendente con l'id passato in input
+        if (updates.get("banca_ore") == null) {//controllo che non manchi il valore da aggiungere
+            return ResponseEntity.ok("Error: missing ore to add");
+        }
+        return ResponseEntity.ok(result);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+    }
+}
     @PostMapping("/FilterBy")//indica che questo metodo ascolta all'endpoint FilterBy
     public ResponseEntity <String> SearchBy(@RequestBody Map<String, String> requestBody) {//metodo per cercare in base a un attributo diverso dalla chiave primaria
         try{
