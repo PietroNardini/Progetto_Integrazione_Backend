@@ -10,13 +10,13 @@ import com.example.microServizio.repository.MyRepository;
 
 import java.util.List;
 import java.util.Optional;
-@Service
+@Service // questa annotazione è utilizzata per rappresentare la logica di business o i servizi applicativi.
 public class MyService {
     
     @Autowired
-    private MyRepository myRepository;
+    private MyRepository myRepository; //instanzio la repository con le dichiarazione delle query che si trovano in JpaRepository
     
-    public List<Dipendente> FindEmployee(String key,String value){
+    public List<Dipendente> FindEmployee(String key,String value){ //questo metodo ritorna una lista di dipendenti con l'attributo(key) di un certo valore(value)
         if(key.equals("nome")){
             return myRepository.findByNome(value);
         }
@@ -30,20 +30,30 @@ public class MyService {
             return null;
         }
     }
-    public Dipendente FindEmployeeById(Integer id){
+    public Dipendente FindEmployeeById(Integer id){//trova il dipendente con l'id passato in input e lo ritorna oppura ritorna nullo se non trova nessun impiegato
         Optional<Dipendente> results=myRepository.findById(id.longValue());
         return results.orElse(null);
     }
     @Transactional
+    /**
+     * Inserisce un nuovo record di tipo Dipendente nel database.
+     * 
+     * @param record Il record da inserire, di tipo Dipendente.
+     * @return Una stringa che indica il risultato dell'operazione:
+     *         - "There are one or more null fields" se uno o più campi del record sono null.
+     *         - "The record already exists" se il record con lo stesso ID esiste già.
+     *         - "Record inserted" se l'inserimento è avvenuto con successo.
+     * @throws Exception Se si verifica un errore durante l'operazione.
+     */
     public String insert(Dipendente record) throws Exception {
-        if (record.isNull()) {
+        if (record.isNull()) { // Controlla se il record contiene campi null
             return "There are one or more null fields";
         }
-        if (record.getId() != null && myRepository.existsById(record.getId())) {
+        if (record.getId() != null && myRepository.existsById(record.getId())) { // Verifica se il record esiste già
             return "The record already exists";
         }
-        myRepository.save(record);
-        return "Record inserted";
+        myRepository.save(record); // Salva il record nel database
+        return "Record inserted"; // Ritorna un messaggio di successo
     }
     
 }

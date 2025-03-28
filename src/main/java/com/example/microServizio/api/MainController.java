@@ -1,6 +1,7 @@
 package com.example.microServizio.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,32 +15,43 @@ import com.example.microServizio.services.MyService;
 import com.example.microServizio.types.Dipendente;
 
 @RestController
-@RequestMapping("/api")
+
+/*Indica che questa classe è un controller REST, progettato per gestire richieste HTTP e restituire risposte JSON o altri formati direttamente nel corpo della risposta. */
+@RequestMapping("/api")//tutte le richieste a questa classe inizieranno con /api.
 public class MainController {
-    @Autowired
-    private MyService myService;
-    @PostMapping("/FilterBy")
-    public ResponseEntity <String> FilterBy(@RequestBody Map<String, String> requestBody) {
+    @Autowired//permette di iniettare automaticamente l'istanza di un Bean in un altra classe
+    private MyService myService;//instanzio la classe in cui ci sono le implementazioni dei metodi per interfacciarsi con il database
+    @PostMapping("/FilterBy")//indica che questo metodo ascolta all'endpoint FilterBy
+    public ResponseEntity <String> SearchBy(@RequestBody Map<String, String> requestBody) {//metodo per cercare in base a un attributo diverso dalla chiave primaria
         try{
-            Map.Entry<String, String> res = requestBody.entrySet().iterator().next();
-            String key = res.getKey();
+            Map.Entry<String, String> res = requestBody.entrySet().iterator().next();//ottengo un entry della mappa data in input al metodo
+            String key = res.getKey();//assegno a delle variabili la chiave e il valore della entry 
             String value = res.getValue();
             
-            if (key == null || value == null) {
+            if (key == null || value == null) {//controllo che non manchi la chiave oppure il valore
                 return ResponseEntity.ok("Error: missing key or value");
             }
-            return ResponseEntity.ok(myService.FindEmployee(key, value).toString());
+            List<Dipendente> results=myService.FindEmployee(key, value);
+            if(results==null){
+                return ResponseEntity.ok("attributo sbagliato");
+            }
+            if(!results.isEmpty()){
+                return ResponseEntity.ok(results.toString());
+            }
+            else{
+                return ResponseEntity.ok("there was no employee with "+key+" = "+value);
+            }
         }
         catch (Exception e){
             return ResponseEntity.ok("Error: " + e.getMessage());
         }
     }
-    @PostMapping("/readId")
-    public ResponseEntity<String> readId(@RequestBody Map<String, Integer> requestBody) {
+    @PostMapping("/readId")//questo metodo ascolta all'endpoint /readId
+    public ResponseEntity<String> readId(@RequestBody Map<String, Integer> requestBody) {//metodo per cercare un impiegato in base all'Id
         try{
-            Integer id = requestBody.get("id");
-            Dipendente record = myService.FindEmployeeById(id);
-            if (record == null) {
+            Integer id = requestBody.get("id");//ottengo l'id per cui cercare
+            Dipendente record = myService.FindEmployeeById(id);//effettuo la ricerca
+            if (record == null) {// se non viene trovato nessun Dipendente con quell'ID
                 return ResponseEntity.ok("Employee not found");
             }
             return ResponseEntity.ok(record.toString());
@@ -49,10 +61,10 @@ public class MainController {
         }
         
     }
-    @PostMapping("/saveRecord") // New endpoint to save data
-    public ResponseEntity<Map<String, String>> saveRecord(@RequestBody Dipendente record) {
+    @PostMapping("/saveRecord") //questo metodo ascolta all'endpoint /saveRecord
+    public ResponseEntity<Map<String, String>> saveRecord(@RequestBody Dipendente record) {//metodo per aggiungere alla table un dipendente dato in input
         try{
-            String results=myService.insert(record);
+            String results=myService.insert(record);//inserisco il valore nel database e ricevo risposta su come è andata l'inserzione
             Map<String, String> response = new HashMap<>();
             response.put("message", results);
             return ResponseEntity.ok(response);
