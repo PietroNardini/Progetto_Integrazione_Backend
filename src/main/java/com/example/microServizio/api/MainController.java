@@ -36,9 +36,9 @@ public class MainController {
     @PostMapping("/saveRecord") // New endpoint to save data
     public ResponseEntity<Map<String, String>> saveRecord(@RequestBody Dipendente record) {
         try{
-            myService.insert(record);
+            String results=myService.insert(record);
             Map<String, String> response = new HashMap<>();
-            response.put("message", "Record saved successfully");
+            response.put("message", results);
             return ResponseEntity.ok(response);
         }
         catch (Exception e){

@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +20,6 @@ public class Dipendente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
-    private Integer userId;  
     
     private String nome;     
     
@@ -39,17 +36,18 @@ public class Dipendente {
     public String getCognome(){
         return cognome;
     }
-    public Integer getUserId(){
-        return userId;
-    }
     public Double getbancaOre(){
             return bancaOre;
     }
     public Ruolo getRuolo(){
         return ruolo;
     }
+    public boolean isNull(){
+       
+        return ruolo==null||nome==null||cognome==null;//ritorna true se ci sono uno o più campi nulli
+    }
     public String toString(){
-        return "Dipendente [id=" + id + ", userId=" + userId + ", nome=" + nome + ", cognome=" + cognome + ", ruolo=" + ruolo + ", bancaOre=" + bancaOre + "]";
+        return "Dipendente [id=" + id + " nome=" + nome + ", cognome=" + cognome + ", ruolo=" + ruolo + ", bancaOre=" + bancaOre + "]";
     }
     
 }

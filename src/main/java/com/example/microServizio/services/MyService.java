@@ -20,22 +20,15 @@ public class MyService {
         return results.orElse(null);
     }
     @Transactional
-    public void insert(Dipendente record) throws Exception {
-        if (record.getId() != null) {
-            Optional<Dipendente> existingRecord = myRepository.findById(record.getId().longValue());
-            if (existingRecord.isPresent()) {
-                Dipendente existing = existingRecord.get();
-                existing.setNome(record.getNome());
-                existing.setCognome(record.getCognome());
-                existing.setRuolo(record.getRuolo());
-                existing.setUserId(record.getUserId());
-                existing.setBancaOre(record.getbancaOre());
-                myRepository.save(existing);
-            } else {
-                myRepository.save(record);
-            }
-        } else {
-            myRepository.save(record);
+    public String insert(Dipendente record) throws Exception {
+        if (record.isNull()) {
+            return "There are one or more null fields";
         }
+        if (record.getId() != null && myRepository.existsById(record.getId())) {
+            return "The record already exists";
+        }
+        myRepository.save(record);
+        return "Record inserted";
     }
+    
 }
