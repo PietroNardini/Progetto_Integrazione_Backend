@@ -26,7 +26,7 @@ public class Dipendente {
     private String cognome;  
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
-    private Double bancaOre; 
+    private Double bancaOre=0.0; 
     public Integer getId() {
         return id;
     }
